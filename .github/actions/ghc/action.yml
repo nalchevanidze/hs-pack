@@ -1,0 +1,10 @@
+name: 'Setup GHC'
+description: 'Setup GHC (Glasgow Haskell Compiler) environment'
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Haskell
+      uses: haskell-actions/setup@v2
+      with:
+        ghc-version: 'latest'
+        cabal-version: 'latest'
