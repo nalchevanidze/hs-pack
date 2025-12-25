@@ -22,7 +22,6 @@ jobs:
           binary-name: my-app
           ghc-version: '9.4.8'
           cabal-version: '3.10'
-          
       - name: Test binary exists
         shell: bash
         run: |

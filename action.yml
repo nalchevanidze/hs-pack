@@ -121,14 +121,18 @@ runs:
         # Generate checksums if requested
         if [ "${{ inputs.generate-checksums }}" = "true" ]; then
           cd release
+          CHECKSUM_FILE="${OUTPUT_NAME}.sha256"
           if command -v sha256sum &> /dev/null; then
-            sha256sum "$OUTPUT_NAME" > "${OUTPUT_NAME}.sha256"
-            echo "checksum-path=$(pwd)/${OUTPUT_NAME}.sha256" >> $GITHUB_OUTPUT
+            sha256sum "$OUTPUT_NAME" > "$CHECKSUM_FILE"
           elif command -v shasum &> /dev/null; then
-            shasum -a 256 "$OUTPUT_NAME" > "${OUTPUT_NAME}.sha256"
-            echo "checksum-path=$(pwd)/${OUTPUT_NAME}.sha256" >> $GITHUB_OUTPUT
+            shasum -a 256 "$OUTPUT_NAME" > "$CHECKSUM_FILE"
           else
             echo "Warning: Neither sha256sum nor shasum found, skipping checksum generation"
+          fi
+          
+          # Only set output if checksum file was created
+          if [ -f "$CHECKSUM_FILE" ]; then
+            echo "checksum-path=$(pwd)/$CHECKSUM_FILE" >> $GITHUB_OUTPUT
           fi
           cd ..
         fi
