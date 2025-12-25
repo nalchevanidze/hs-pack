@@ -99,7 +99,11 @@ runs:
         echo "Found binary at: $BINARY_PATH"
         
         # Determine OS and architecture
-        OS_NAME=$(echo "$RUNNER_OS" | tr '[:upper:]' '[:lower:]')
+        if [ "$RUNNER_OS" = "Windows" ]; then
+          OS_NAME="windows"
+        else
+          OS_NAME=$(uname -s | tr '[:upper:]' '[:lower:]')
+        fi
         ARCH=$(uname -m)
         
         # Create release directory
