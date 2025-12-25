@@ -9,7 +9,7 @@ case "$(uname)" in
     MINGW64_NT-*|MSYS_NT-*)
         OS=windows;;
     *)
-        OS=linux
+        OS=linux;;
 esac
 
 if [ "$OS" == "windows" ]; then
@@ -19,7 +19,16 @@ fi
 rm -rf out
 mkdir -p out
 
+# Check if 7z is available
+command -v 7z >/dev/null 2>&1 || { echo "7z is required but not installed"; exit 1; }
+
 7z e "$NAME.zip" -o./out
+
+# Check if the executable was extracted successfully
+if [ ! -f "./out/$EXECUTABLE" ]; then
+  echo "Executable not found: ./out/$EXECUTABLE"
+  exit 1
+fi
 
 ./out/$EXECUTABLE about
 
