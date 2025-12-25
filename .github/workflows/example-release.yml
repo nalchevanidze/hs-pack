@@ -1,0 +1,32 @@
+name: Example - Release Build
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-release:
+    name: Build ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+          - os: macos-latest
+            platform: macos
+          - os: windows-latest
+            platform: windows
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build and upload binary
+        uses: nalchevanidze/hs-pack@v1
+        with:
+          binary-name: my-app
+          ghc-version: '9.4.8'
+          upload-release: 'true'
